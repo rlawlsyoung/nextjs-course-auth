@@ -1,5 +1,7 @@
 import { connectToDatabase } from "../../lib/db";
 
+import { hashPassword } from "../../lib/auth";
+
 const handler = async (req, res) => {
   const data = req.body;
   const { email, password } = data;
@@ -21,10 +23,14 @@ const handler = async (req, res) => {
 
   const db = client.db("auth-demo");
 
-  db.collection("users").insertIne({
+  const hashedPassword = hashPassword();
+
+  const result = await db.collection("users").insertIne({
     email,
-    password,
+    password: hashedPassword,
   });
+
+  res.status(201).json({ message: "Created User." });
 };
 
 export default handler;
