@@ -23,7 +23,7 @@ const handler = async (req, res) => {
 
     const db = client.db("auth-demo");
 
-    const hashedPassword = hashPassword(password);
+    const hashedPassword = await hashPassword(password);
 
     const result = await db.collection("users").insertOne({
       email,
