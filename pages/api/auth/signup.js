@@ -1,5 +1,4 @@
 import { connectToDatabase } from "../../../lib/db";
-
 import { hashPassword } from "../../../lib/auth";
 
 const handler = async (req, res) => {
@@ -24,9 +23,9 @@ const handler = async (req, res) => {
 
     const db = client.db("auth-demo");
 
-    const hashedPassword = hashPassword();
+    const hashedPassword = hashPassword(password);
 
-    const result = await db.collection("users").insertIne({
+    const result = await db.collection("users").insertOne({
       email,
       password: hashedPassword,
     });
