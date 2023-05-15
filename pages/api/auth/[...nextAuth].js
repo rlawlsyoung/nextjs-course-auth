@@ -9,33 +9,33 @@ export default NextAuth({
   },
   providers: [
     Providers.Credentials({
-      credentials: {
-        async authorize(credentials) {
-          const client = await connectToDatabase();
+      async authorize(credentials) {
+        const client = await connectToDatabase();
 
-          const usersCollection = client.db().connection("users");
+        const usersCollection = client.db("auth-demo").collection("users");
 
-          const user = await usersCollection.findOne({
-            email: credentials.email,
-          });
+        const user = await usersCollection.findOne({
+          email: credentials.email,
+        });
 
-          if (!user) {
-            client.close();
-            throw new Error("No user found!");
-          }
-
-          await verifyPassword(credentials.password, user.password);
-
-          if (!isValid) {
-            client.close();
-            throw new Error("Could not log you in.");
-            return;
-          }
-
+        if (!user) {
           client.close();
+          throw new Error("No user found!");
+        }
 
-          return { email: user.email };
-        },
+        const isValid = await verifyPassword(
+          credentials.password,
+          user.password
+        );
+
+        if (!isValid) {
+          client.close();
+          throw new Error("Could not log you in.");
+        }
+
+        client.close();
+
+        return { email: user.email };
       },
     }),
   ],

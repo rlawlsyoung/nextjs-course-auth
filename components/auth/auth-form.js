@@ -1,4 +1,6 @@
 import { useState, useRef } from "react";
+import { signIn } from "next-auth/client";
+
 import classes from "./auth-form.module.css";
 
 async function createUser(email, password) {
@@ -35,6 +37,15 @@ function AuthForm() {
     const enteredPassword = passwordRef.current.value;
 
     if (isLogin) {
+      // redirect: false 는 next-auth가 로그인이 실패하면 기본적으로 에러 페이지로 redirect시키는데 그것을 방지한 것임
+      // 또 2번째 인수 자체가 인증 함수(...nextAuth.js 함수)에서 credentials 인수로 작용한다
+      const result = await signIn("credentials", {
+        redirect: false,
+        email: enteredEmail,
+        password: enteredPassword,
+      });
+
+      console.log(result);
     } else {
       try {
         const result = await createUser(enteredEmail, enteredPassword);
