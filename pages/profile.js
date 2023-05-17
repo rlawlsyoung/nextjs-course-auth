@@ -1,7 +1,8 @@
 import { getSession } from "next-auth/client";
 import UserProfile from "../components/profile/user-profile";
 
-function ProfilePage() {
+function ProfilePage({ session }) {
+  console.log(session);
   return <UserProfile />;
 }
 

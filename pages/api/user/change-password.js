@@ -49,7 +49,7 @@ async function handler(req, res) {
 
   const result = await usersCollection.updateOne(
     { email: userEmail },
-    { $set: { password: newPassword } }
+    { $set: { password: hashedPassword } }
   );
 
   client.close();

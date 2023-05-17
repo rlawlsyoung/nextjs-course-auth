@@ -50,6 +50,8 @@ function AuthForm() {
       if (!result.error) {
         router.replace("/profile");
       }
+
+      console.log(result);
     } else {
       try {
         const result = await createUser(enteredEmail, enteredPassword);
